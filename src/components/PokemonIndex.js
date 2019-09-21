@@ -6,6 +6,7 @@ import _ from 'lodash'
 
 class PokemonPage extends React.Component {
 
+  // store a copy of our original data so we can operate search, filter, and sort correctly
   state = {
     pokemonCollection: [],
     original: [],
@@ -13,6 +14,7 @@ class PokemonPage extends React.Component {
     sortBy: "all"
   }
 
+  // fetch our data when the page loads for the 1st time
   componentDidMount(){
     fetch("http://localhost:3000/pokemon")
     .then(result => result.json())
@@ -22,11 +24,8 @@ class PokemonPage extends React.Component {
     }))
   }
 
-  filterPokemons = (event) => {
-    const pokemons = this.state.original.filter(pokemon => pokemon.name.includes(event.target.value))
-    this.setState({pokemonCollection: pokemons})
-  }
 
+  // sent down as props, called when we submit the form to add a pokemon to original data
   addPokemon = (pokeObject) => {
     const newArr = [pokeObject, ...this.state.original]
     this.setState({
@@ -34,7 +33,9 @@ class PokemonPage extends React.Component {
       original: newArr
     })
   }
-
+// *********************** FILTER ***********************
+// sent down as props, called when we change the filter
+// calls filter AND sort so we can properly sort the pokemon after a filter 
   changeFilter = (event) => {
     const filteredArr = this.handleFilter(event.target.value)
     const sortedArr = this.handleSort(this.state.sortBy, filteredArr)
@@ -43,18 +44,21 @@ class PokemonPage extends React.Component {
       pokemonCollection: sortedArr
     })
   }
-
+// delegates whether to filter by grass type or filter by id (the pokemon are already in ID order from the fetch)
   handleFilter = (filterStatus) => {
     console.log('filtering...')
-    if (filterStatus !== "all"){
-     return this.state.original.filter((poke) => {
+    if (filterStatus !== "all") {
+      return this.state.original.filter((poke) => {
         return poke.types.includes("grass")
       })
-    } else{
+    } else {
       return this.state.original
     }
   }
 
+  // *********************** SORT ***************************
+ 
+// passed down as props, called when we change the sort
   changeSort = (event) => {
     const newArr = this.handleSort(event.target.value, this.state.pokemonCollection)
     this.setState({
@@ -62,7 +66,8 @@ class PokemonPage extends React.Component {
       pokemonCollection: newArr
     })
   }
-
+// handles which sort method to use by looking at the event data passed in from above
+// we pass in the pokemon to sort because we might need to sort already filtered pokemon
   handleSort = (sortBy, pokesToSort) => {
     console.log('sorting...')
     if(sortBy === "name"){
@@ -71,7 +76,7 @@ class PokemonPage extends React.Component {
       return this.sortPokesById(pokesToSort);
     }
   }
-
+// implementation of sort functions according to name/id
   sortPokesById = (pokesToSort) => {
     return pokesToSort.sort(this.compareIDs)
   }

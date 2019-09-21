@@ -12,13 +12,14 @@ class PokemonForm extends React.Component {
       backUrl: ''
     }
   }
-
+// sets state of form to reflect what the user sees on page - makes form CONTROLLED
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value
     })
   }
-
+// called when we add a new pokemon, mimic the pokemon in our api so that our page can display correctly
+// passed the pokemon object up to the index via the addPokemon prop passed down
   handleSubmit = (event) => {
     event.preventDefault()
     const pokeObject = {
@@ -34,7 +35,8 @@ class PokemonForm extends React.Component {
       id: 1
     }
 
-    this.props.addPokemon(pokeObject)
+    this.props.addPokemon(pokeObject);
+    // resets the state and form
     this.setState({
       name: '',
       hp: '',
