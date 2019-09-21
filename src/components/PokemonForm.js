@@ -34,6 +34,12 @@ class PokemonForm extends React.Component {
       }
     }
     this.props.newPoke(pokeObj)
+    this.setState({
+      name: "",
+      hp: "",
+      frontUrl: "",
+      backUrl: ""
+    })
   }
 
   render() {
