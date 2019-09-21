@@ -5,6 +5,7 @@ class PokemonCard extends React.Component {
   state = {
     cardFront: true
   }
+  //! Toggling if we wanna see pokebutts or not
   flipCard = () => {
     this.setState({
       cardFront: !this.state.cardFront
